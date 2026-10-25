@@ -49,9 +49,12 @@ function Reveal({ children, className = "", delay = 0 }: { children: ReactNode; 
     if (!el) return;
     const obs = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          el.classList.add("is-visible");
-          obs.disconnect();
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            el.classList.add("is-visible");
+            obs.disconnect();
+            break;
+          }
         }
       },
       { threshold: 0.15 }
