@@ -20,6 +20,14 @@ export const Route = createFileRoute("/")({
 });
 
 const ADDRESS = "Rua Olimpio França de Matos, 35 - Jardim Sol Poente, São Miguel Arcanjo - SP, 18232-128";
+const WHATSAPP = "5515981183740";
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP}`;
+const WHATSAPP_DISPLAY = "(15) 98118-3740";
+
+const HOURS = [
+  { day: "Terça a sábado", time: "Somente com hora marcada", open: true },
+  { day: "Domingo e segunda", time: "Não abrimos", open: false },
+];
 
 const services = [
   { icon: "🛁", name: "Banho", desc: "Produtos suaves, secagem cuidadosa e perfume delicado." },
@@ -73,10 +81,15 @@ function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [form, setForm] = useState({ tutor: "", pet: "", tipo: "Cachorro", servico: "Banho", data: "", obs: "" });
 
+  const todayISO = new Date().toISOString().slice(0, 10);
+  const dayOfWeek = form.data ? new Date(`${form.data}T12:00:00`).getDay() : -1;
+  const closedDay = dayOfWeek === 0 || dayOfWeek === 1;
+
   const agendar = (e: React.FormEvent) => {
     e.preventDefault();
+    if (closedDay) return;
     const msg = `Olá! Gostaria de agendar:\nTutor: ${form.tutor}\nPet: ${form.pet} (${form.tipo})\nServiço: ${form.servico}\nData: ${form.data}${form.obs ? `\nObs: ${form.obs}` : ""}`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
+    window.open(`${WHATSAPP_LINK}?text=${encodeURIComponent(msg)}`, "_blank");
   };
 
   const field = "w-full rounded-xl border border-border bg-background px-4 py-3 outline-none focus:ring-2 focus:ring-primary";
@@ -136,6 +149,11 @@ function Index() {
             </h1>
             <p className="mt-5 text-lg text-muted-foreground">
               Seu melhor amigo cheiroso, lindo e feliz. Banho e tosa feitos com amor e muito cuidado.
+            </p>
+            <p className="mt-4 inline-flex flex-wrap items-center gap-2 rounded-2xl bg-card px-4 py-3 text-sm font-semibold shadow-soft">
+              🕐 Terça a sábado, somente com hora marcada
+              <span className="text-muted-foreground">·</span>
+              <span className="text-primary">Domingo e segunda não abrimos</span>
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <a href="#agendar" className="rounded-full bg-gradient-warm px-8 py-4 font-bold text-primary-foreground shadow-soft transition hover:scale-105">
@@ -234,7 +252,10 @@ function Index() {
           <Reveal className="text-center">
             <p className="mb-2 text-sm font-bold uppercase tracking-widest text-primary">Agendamento</p>
             <h2 className="font-display text-4xl font-extrabold">Agende pelo WhatsApp</h2>
-            <p className="mt-3 text-muted-foreground">Preencha os dados e a mensagem vai prontinha para o nosso WhatsApp.</p>
+            <p className="mt-3 text-muted-foreground">
+              Preencha os dados e a mensagem vai prontinha para o nosso WhatsApp {WHATSAPP_DISPLAY}.
+            </p>
+            <p className="mt-2 text-sm font-semibold text-primary">Terça a sábado, somente com hora marcada</p>
           </Reveal>
           <Reveal delay={100}>
             <form onSubmit={agendar} className="mt-8 space-y-4 rounded-3xl bg-card p-6 shadow-soft">
@@ -258,11 +279,31 @@ function Index() {
                   ))}
                 </div>
               </div>
-              <input required type="date" className={field} value={form.data} onChange={(e) => setForm({ ...form, data: e.target.value })} aria-label="Data do agendamento" />
+              <input
+                required
+                type="date"
+                min={todayISO}
+                className={field}
+                value={form.data}
+                onChange={(e) => setForm({ ...form, data: e.target.value })}
+                aria-label="Data do agendamento"
+              />
+              {closedDay && (
+                <p className="rounded-xl bg-primary/10 px-4 py-3 text-sm font-semibold text-primary">
+                  Domingo e segunda não abrimos. Escolha um dia de terça a sábado. 🐾
+                </p>
+              )}
               <textarea placeholder="Observações (opcional)" rows={3} className={field} value={form.obs} onChange={(e) => setForm({ ...form, obs: e.target.value })} />
-              <button className="w-full rounded-full bg-gradient-warm py-4 font-bold text-primary-foreground shadow-soft transition hover:scale-[1.02]">
+              <button
+                disabled={closedDay}
+                className="w-full rounded-full bg-gradient-warm py-4 font-bold text-primary-foreground shadow-soft transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50"
+              >
                 Enviar pedido 🐾
               </button>
+              <p className="text-center text-sm text-muted-foreground">
+                Atendemos de terça a sábado, somente com hora marcada.<br />
+                Domingo e segunda não abrimos.
+              </p>
             </form>
           </Reveal>
         </div>
@@ -275,9 +316,30 @@ function Index() {
               <p className="mb-2 text-sm font-bold uppercase tracking-widest text-primary">Visite-nos</p>
               <h2 className="font-display text-3xl font-extrabold">Venha nos visitar</h2>
               <p className="mt-4">📍 Rua Olimpio França de Matos, 35<br />Jardim Sol Poente<br />São Miguel Arcanjo - SP<br />CEP 18232-128</p>
-              <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`} className="mt-6 inline-block font-bold text-primary underline">
-                Abrir no Google Maps
-              </a>
+              <div className="mt-6 rounded-2xl bg-secondary p-5">
+                <p className="text-sm font-bold uppercase tracking-widest text-primary">Horários</p>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {HOURS.map((h) => (
+                    <li key={h.day} className="flex items-center justify-between gap-4">
+                      <span className="font-semibold">{h.day}</span>
+                      <span className={h.open ? "font-semibold text-primary" : "font-semibold text-muted-foreground"}>{h.time}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-4">
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  href={`${WHATSAPP_LINK}?text=${encodeURIComponent("Olá! Gostaria de agendar um horário para meu pet 🐾")}`}
+                  className="rounded-full bg-gradient-warm px-6 py-3 text-sm font-bold text-primary-foreground shadow-soft transition hover:scale-105"
+                >
+                  WhatsApp {WHATSAPP_DISPLAY}
+                </a>
+                <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`} className="font-bold text-primary underline">
+                  Abrir no Google Maps
+                </a>
+              </div>
             </div>
             <iframe title="Mapa" className="h-72 w-full md:h-full" loading="lazy" src={`https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}&output=embed`} />
           </div>
@@ -291,12 +353,16 @@ function Index() {
             <a key={l.href} href={l.href} className="text-muted-foreground transition-colors hover:text-primary">{l.label}</a>
           ))}
         </nav>
+        <p className="mt-4 text-sm font-semibold text-primary">WhatsApp {WHATSAPP_DISPLAY}</p>
+        <p className="mt-1 text-sm text-muted-foreground">Terça a sábado, somente com hora marcada · Domingo e segunda não abrimos</p>
         <p className="mt-4 text-sm text-muted-foreground">© {new Date().getFullYear()} Tabata Aita Estética Pet · São Miguel Arcanjo - SP</p>
       </footer>
 
       <a
-        href="#agendar"
-        aria-label="Agendar horário"
+        href={`${WHATSAPP_LINK}?text=${encodeURIComponent("Olá! Gostaria de agendar um horário para meu pet 🐾")}`}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Agendar pelo WhatsApp"
         className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-warm text-2xl shadow-soft transition hover:scale-110"
       >
         🐾
