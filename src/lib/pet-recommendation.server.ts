@@ -4,7 +4,7 @@ import { createLovableAiGatewayRunIdFetch } from "./ai/run-id.server";
 import { recommendationSchema, type PetProfile } from "./pet-profile";
 
 export async function suggestPetCare(profile: PetProfile, request: Request) {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env['LOVABLE_API_KEY'];
   if (!apiKey) return { error: "A inteligência artificial precisa ser ativada pela loja.", recommendation: null };
   const gateway = createLovableAiGatewayRunIdFetch();
   const provider = createOpenAI({
