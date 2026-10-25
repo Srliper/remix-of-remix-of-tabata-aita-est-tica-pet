@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import hero from "@/assets/hero.jpg";
+import { PetCareAssistant } from "@/components/pet-care-assistant";
 
 const TITLE = "Tabata Aita Estética Pet | Banho e Tosa em São Miguel Arcanjo";
 const DESC = "Banho, tosa e cuidados com carinho para seu pet no Jardim Sol Poente, São Miguel Arcanjo - SP.";
@@ -44,6 +45,7 @@ const steps = [
 
 const navLinks = [
   { label: "Serviços", href: "#servicos" },
+  { label: "Cuidados com IA", href: "#cuidados" },
   { label: "Como funciona", href: "#como-funciona" },
   { label: "Sobre", href: "#sobre" },
   { label: "Agendar", href: "#agendar" },
@@ -191,6 +193,8 @@ function Index() {
           ))}
         </div>
       </section>
+
+      <PetCareAssistant />
 
       <section id="como-funciona" className="bg-secondary scroll-mt-24 py-16">
         <div className="mx-auto max-w-6xl px-6">
