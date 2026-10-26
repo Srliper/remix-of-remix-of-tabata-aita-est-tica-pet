@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep pet recommendation RPCs in `.functions.ts`, with model calls and prompts in `.server.ts` files, so credentials never enter the browser.
+- Import generated pet imagery as local assets and identify it as illustrative; use real owner-approved photos for staff, premises and results to avoid misrepresenting the business.
