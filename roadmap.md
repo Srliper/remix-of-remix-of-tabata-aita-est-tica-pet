@@ -1,4 +1,5 @@
 # Tasks
+- [ ] Add private reservation dashboard, stored requests, confirm/cancel actions and Meet sharing. Admin activation blocked until a real owner account is identified.
 - [x] Improve imagery and page presentation; verify desktop/mobile images and menu; provide owner-information checklist in the reply.
 - [ ] Clear copied migrations and scaffold an empty migration set for the remixed database. Blocked: no supported reset tool; journals must not be manually edited.
 - [x] Add AI service and care recommendations from pet size, coat, needs and preferences.
