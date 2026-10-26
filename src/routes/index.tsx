@@ -1,6 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import hero from "@/assets/hero.jpg";
+import cover from "@/assets/pets-cover.jpg";
+import bath from "@/assets/pet-bath.jpg";
+import grooming from "@/assets/pet-grooming.jpg";
+import { Button } from "@/components/ui/button";
+import { ArrowUpRight, PawPrint, Menu, X, MessageCircle } from "lucide-react";
 import { PetCareAssistant } from "@/components/pet-care-assistant";
 
 const TITLE = "Tabata Aita Estética Pet | Banho e Tosa em São Miguel Arcanjo";
@@ -31,10 +36,10 @@ const HOURS = [
 ];
 
 const services = [
-  { icon: "🛁", name: "Banho", desc: "Produtos suaves, secagem cuidadosa e perfume delicado." },
-  { icon: "✂️", name: "Tosa", desc: "Tosa higiênica, na máquina ou na tesoura, do jeitinho do seu pet." },
-  { icon: "💅", name: "Estética", desc: "Hidratação, corte de unhas, limpeza de ouvidos e laços." },
-  { icon: "🦴", name: "Petshop", desc: "Rações, petiscos, brinquedos e acessórios." },
+  { image: bath, icon: "🛁", name: "Banho", desc: "Produtos suaves, secagem cuidadosa e perfume delicado." },
+  { image: grooming, icon: "✂️", name: "Tosa", desc: "Tosa higiênica, na máquina ou na tesoura, do jeitinho do seu pet." },
+  { image: hero, icon: "💅", name: "Estética", desc: "Hidratação, corte de unhas, limpeza de ouvidos e laços." },
+  { image: cover, icon: "🦴", name: "Petshop", desc: "Rações, petiscos, brinquedos e acessórios." },
 ];
 
 const steps = [
@@ -105,25 +110,25 @@ function Index() {
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <a href="#topo" className="font-display text-xl font-extrabold text-primary">🐾 Tabata Aita</a>
-          <nav className="hidden gap-6 text-sm font-semibold md:flex">
+          <nav className="hidden gap-6 text-sm font-semibold lg:flex">
             {navLinks.map((l) => (
               <a key={l.href} href={l.href} className="transition-colors hover:text-primary">{l.label}</a>
             ))}
           </nav>
-          <a href="#agendar" className="hidden rounded-full bg-gradient-warm px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-soft transition hover:scale-105 md:block">
+          <a href="#agendar" className="hidden rounded-full bg-gradient-warm px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-soft transition hover:scale-105 lg:block">
             Agendar horário
           </a>
-          <button
-            aria-label="Abrir menu"
+          <Button variant="outline" size="icon"
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={menuOpen}
-            className="rounded-xl border border-border p-2 md:hidden"
+            className="rounded-xl border border-border p-2 lg:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            <span className="block text-xl leading-none">{menuOpen ? "✕" : "☰"}</span>
-          </button>
+            {menuOpen ? <X /> : <Menu />}
+          </Button>
         </div>
         {menuOpen && (
-          <nav className="border-t border-border/60 bg-background px-6 py-4 md:hidden">
+          <nav className="border-t border-border/60 bg-background px-6 py-4 lg:hidden">
             <div className="flex flex-col gap-1">
               {navLinks.map((l) => (
                 <a
@@ -140,41 +145,23 @@ function Index() {
         )}
       </header>
 
-      <section id="topo" className="relative overflow-hidden">
-        <div aria-hidden className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-secondary blur-3xl" />
-        <div aria-hidden className="pointer-events-none absolute -right-24 top-40 h-72 w-72 rounded-full bg-accent/40 blur-3xl" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-6 py-14 md:grid-cols-2 md:py-20">
-          <Reveal>
-            <p className="mb-3 inline-block rounded-full bg-secondary px-4 py-1 text-sm font-semibold">São Miguel Arcanjo · SP</p>
-            <h1 className="font-display text-5xl font-extrabold leading-tight md:text-6xl">
-              Tabata Aita <span className="text-primary">Estética Pet</span>
-            </h1>
-            <p className="mt-5 text-lg text-muted-foreground">
-              Seu melhor amigo cheiroso, lindo e feliz. Banho e tosa feitos com amor e muito cuidado.
-            </p>
-            <p className="mt-4 inline-flex flex-wrap items-center gap-2 rounded-2xl bg-card px-4 py-3 text-sm font-semibold shadow-soft">
-              🕐 Terça a sábado, somente com hora marcada
-              <span className="text-muted-foreground">·</span>
-              <span className="text-primary">Domingo e segunda não abrimos</span>
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <a href="#agendar" className="rounded-full bg-gradient-warm px-8 py-4 font-bold text-primary-foreground shadow-soft transition hover:scale-105">
-                Agendar horário
-              </a>
-              <a href="#servicos" className="rounded-full border border-border px-8 py-4 font-bold transition hover:border-primary hover:text-primary">
-                Ver serviços
-              </a>
-            </div>
-          </Reveal>
-          <Reveal delay={120} className="relative">
-            <img src={hero} alt="Cachorrinho após banho e tosa" width={1280} height={960} className="rounded-[2rem] shadow-soft" />
-            <div className="absolute -bottom-5 left-6 rounded-2xl bg-card px-5 py-4 shadow-soft">
-              <p className="text-sm font-bold">🐾 Banho com carinho</p>
-              <p className="text-xs text-muted-foreground">do jeitinho do seu pet</p>
-            </div>
-          </Reveal>
+      <section id="topo" className="pet-cover relative isolate overflow-hidden bg-cover-base text-cover-foreground">
+        <img src={cover} alt="Cachorro e gato em retrato ilustrativo da estética pet" width={1536} height={1024} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-right" />
+        <div className="pet-cover-shade absolute inset-0" />
+        <div className="relative mx-auto flex min-h-[570px] max-w-6xl items-center px-6 py-14">
+          <div className="pet-cover-copy max-w-lg">
+            <p className="mb-6 flex items-center gap-2 text-sm font-bold uppercase"><PawPrint size={18} /> São Miguel Arcanjo · SP</p>
+            <h1 className="font-display text-5xl font-extrabold leading-tight md:text-6xl">Tabata Aita<br /><span className="text-cover-accent">Estética Pet</span></h1>
+            <p className="mt-5 max-w-sm text-lg leading-relaxed">Banho, tosa e carinho. Um cuidado especial para quem faz parte da sua família.</p>
+            <Button asChild size="lg" className="mt-8 h-14 px-7 text-base font-bold"><a href="#agendar">Agendar um cuidado <ArrowUpRight /></a></Button>
+            <p className="mt-6 max-w-xs text-sm">Terça a sábado · somente com hora marcada</p>
+            <p className="mt-2 text-xs opacity-80">Domingo e segunda não abrimos</p>
+          </div>
         </div>
       </section>
+      <div className="border-b border-border bg-secondary">
+        <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-3 px-6 py-5 text-sm font-semibold"><span>Banho & tosa</span><span>Cuidados personalizados</span><a href="#contato" className="inline-flex items-center gap-2">Jardim Sol Poente <ArrowUpRight size={16} /></a></div>
+      </div>
 
       <section id="servicos" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-16">
         <Reveal>
@@ -184,10 +171,10 @@ function Index() {
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((s, i) => (
             <Reveal key={s.name} delay={i * 80}>
-              <div className="group h-full rounded-3xl bg-card p-6 shadow-soft transition hover:-translate-y-1">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary text-3xl transition group-hover:scale-110">{s.icon}</div>
+              <div className="group h-full overflow-hidden rounded-lg border border-border bg-card transition hover:-translate-y-1">
+                <img src={s.image} alt={`Imagem ilustrativa de ${s.name.toLowerCase()}`} loading="lazy" width={1024} height={1024} className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-[1.03]" /><div className="p-5">
                 <h3 className="mt-4 font-display text-xl font-bold">{s.name}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p><a href="#agendar" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary">Agendar <ArrowUpRight size={16} /></a></div>
               </div>
             </Reveal>
           ))}
@@ -205,7 +192,7 @@ function Index() {
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {steps.map((st, i) => (
               <Reveal key={st.title} delay={i * 100}>
-                <div className="h-full rounded-3xl bg-card p-7 shadow-soft">
+                <div className="h-full border-t border-border py-7">
                   <div className="flex items-center gap-3">
                     <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-warm text-2xl">{st.icon}</span>
                     <span className="font-display text-4xl font-extrabold text-primary/20">{i + 1}</span>
@@ -229,7 +216,7 @@ function Index() {
         </Reveal>
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
           <Reveal>
-            <div className="flex items-start gap-4 rounded-3xl bg-card p-6 shadow-soft">
+            <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-6">
               <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-warm font-display text-xl font-extrabold text-primary-foreground">T</span>
               <div>
                 <h3 className="font-display text-xl font-bold">Tabata Aita</h3>
@@ -239,7 +226,7 @@ function Index() {
             </div>
           </Reveal>
           <Reveal delay={100}>
-            <div className="flex items-start gap-4 rounded-3xl bg-card p-6 shadow-soft">
+            <div className="flex items-start gap-4 rounded-lg border border-border bg-card p-6">
               <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-secondary font-display text-xl font-extrabold text-primary">E</span>
               <div>
                 <h3 className="font-display text-xl font-bold">Emerson</h3>
@@ -262,7 +249,7 @@ function Index() {
             <p className="mt-2 text-sm font-semibold text-primary">Terça a sábado, somente com hora marcada</p>
           </Reveal>
           <Reveal delay={100}>
-            <form onSubmit={agendar} className="mt-8 space-y-4 rounded-3xl bg-card p-6 shadow-soft">
+            <form onSubmit={agendar} className="mt-8 space-y-4 rounded-lg border border-border bg-card p-6">
               <div className="grid gap-4 sm:grid-cols-2">
                 <input required placeholder="Seu nome" className={field} value={form.tutor} onChange={(e) => setForm({ ...form, tutor: e.target.value })} />
                 <input required placeholder="Nome do pet" className={field} value={form.pet} onChange={(e) => setForm({ ...form, pet: e.target.value })} />
@@ -271,7 +258,7 @@ function Index() {
                 <p className="mb-2 text-sm font-semibold">Seu pet é:</p>
                 <div className="flex gap-2">
                   {["Cachorro", "Gato"].map((t) => (
-                    <button key={t} type="button" onClick={() => setForm({ ...form, tipo: t })} className={chip(form.tipo === t)}>{t}</button>
+                    <Button key={t} type="button" onClick={() => setForm({ ...form, tipo: t })} className={chip(form.tipo === t)}>{t}</Button>
                   ))}
                 </div>
               </div>
@@ -279,7 +266,7 @@ function Index() {
                 <p className="mb-2 text-sm font-semibold">Serviço:</p>
                 <div className="flex flex-wrap gap-2">
                   {["Banho", "Tosa", "Banho e Tosa", "Estética"].map((s) => (
-                    <button key={s} type="button" onClick={() => setForm({ ...form, servico: s })} className={chip(form.servico === s)}>{s}</button>
+                    <Button key={s} type="button" onClick={() => setForm({ ...form, servico: s })} className={chip(form.servico === s)}>{s}</Button>
                   ))}
                 </div>
               </div>
@@ -298,12 +285,12 @@ function Index() {
                 </p>
               )}
               <textarea placeholder="Observações (opcional)" rows={3} className={field} value={form.obs} onChange={(e) => setForm({ ...form, obs: e.target.value })} />
-              <button
+              <Button
                 disabled={closedDay}
                 className="w-full rounded-full bg-gradient-warm py-4 font-bold text-primary-foreground shadow-soft transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Enviar pedido 🐾
-              </button>
+                <MessageCircle size={18} /> Enviar pedido
+              </Button>
               <p className="text-center text-sm text-muted-foreground">
                 Atendemos de terça a sábado, somente com hora marcada.<br />
                 Domingo e segunda não abrimos.
@@ -315,7 +302,7 @@ function Index() {
 
       <section id="contato" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-16">
         <Reveal>
-          <div className="grid overflow-hidden rounded-3xl bg-card shadow-soft md:grid-cols-2">
+          <div className="grid overflow-hidden border-y border-border md:grid-cols-2">
             <div className="p-8">
               <p className="mb-2 text-sm font-bold uppercase tracking-widest text-primary">Visite-nos</p>
               <h2 className="font-display text-3xl font-extrabold">Venha nos visitar</h2>

@@ -19,6 +19,9 @@
  */
 
 @theme inline {
+  --color-cover-base: var(--cover-base);
+  --color-cover-foreground: var(--cover-foreground);
+  --color-cover-accent: var(--cover-accent);
   --font-display: var(--font-display);
   --font-sans: var(--font-sans);
   --radius-sm: calc(var(--radius) - 4px);
@@ -64,28 +67,31 @@
 }
 
 :root {
-  --radius: 1.25rem;
+  --cover-base: oklch(0.26 0.04 155);
+  --cover-foreground: oklch(0.99 0 0);
+  --cover-accent: oklch(0.83 0.105 35);
+  --radius: 0.5rem;
   --font-display: "Fraunces", serif;
   --font-sans: "Nunito", sans-serif;
   --gradient-warm: linear-gradient(135deg, oklch(0.72 0.15 35), oklch(0.8 0.12 60));
   --shadow-soft: 0 20px 50px -20px oklch(0.6 0.15 35 / 0.45);
-  --background: oklch(0.98 0.015 70);
-  --foreground: oklch(0.28 0.04 40);
+  --background: oklch(0.99 0.004 155);
+  --foreground: oklch(0.27 0.035 155);
   --card: oklch(1 0.005 70);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.68 0.16 35);
+  --primary: oklch(0.55 0.16 30);
   --primary-foreground: oklch(0.99 0.01 70);
-  --secondary: oklch(0.94 0.04 60);
+  --secondary: oklch(0.95 0.025 155);
   --secondary-foreground: oklch(0.3 0.05 40);
   --muted: oklch(0.95 0.02 70);
-  --muted-foreground: oklch(0.5 0.04 40);
+  --muted-foreground: oklch(0.46 0.025 155);
   --accent: oklch(0.85 0.08 150);
   --accent-foreground: oklch(0.3 0.05 150);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.9 0.03 60);
+  --border: oklch(0.88 0.018 155);
   --input: oklch(0.929 0.013 255.508);
   --ring: oklch(0.704 0.04 256.788);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -176,4 +182,13 @@ html {
     transform: none;
     transition: none;
   }
+}
+
+.pet-cover-shade { background: linear-gradient(90deg, var(--cover-base) 0%, transparent 72%); }
+@media (max-width: 639px) {
+  .pet-cover > img { height: 320px; top: auto; bottom: 0; object-position: right center; }
+  .pet-cover > div.relative { min-height: 690px; align-items: flex-start; padding-top: 32px; padding-bottom: 300px; }
+  .pet-cover-shade { background: linear-gradient(180deg, var(--cover-base) 48%, transparent 76%); }
+  .pet-cover-copy h1 { font-size: 42px; }
+  .pet-cover-copy p.mt-5 { font-size: 16px; }
 }
